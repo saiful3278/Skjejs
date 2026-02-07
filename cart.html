@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cart</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Shop</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+      </nav>
+      <div class="actions">
+        <a class="cart-link" href="cart.html">Cart<span class="badge">0</span></a>
+        <a class="login-link" href="login.html">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <h1>Your Cart</h1>
+      <p>Items you have added.</p>
+    </section>
+    <div class="cart-panel">
+      <div class="cart-items"></div>
+      <div class="cart-summary">
+        <div class="summary-row">
+          <span>Items</span>
+          <span class="cart-count">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Total</span>
+          <span class="cart-total">$0.00</span>
+        </div>
+        <button class="btn btn-primary" type="button">Checkout</button>
+      </div>
+    </div>
+  </main>
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/cart-page.js"></script>
+  <script src="assets/js/checkout.js"></script>
+</body>
+</html>

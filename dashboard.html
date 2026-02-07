@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="index.html">Shop</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <h1>Admin Dashboard</h1>
+      <p>Manage products</p>
+    </section>
+
+    <div class="admin-actions">
+      <button class="btn btn-primary" id="toggle-single">Upload Product</button>
+      <button class="btn btn-outline" id="toggle-bulk">Bulk Upload CSV</button>
+    </div>
+
+    <section class="admin-card" id="single-card" style="display:none">
+      <h2>Upload Product</h2>
+      <form class="admin-form" id="singleUpload">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <input type="text" name="sku" placeholder="SKU" required>
+        <input type="number" name="stock" placeholder="Stock" required>
+        <input type="text" name="images" placeholder="Image URLs (comma separated)">
+        <button class="btn btn-primary" type="submit">Upload Product</button>
+      </form>
+    </section>
+
+    <section class="admin-card" id="bulk-card" style="display:none">
+      <h2>Bulk Upload CSV</h2>
+      <div class="admin-form">
+        <input type="file" id="csvUpload" accept=".csv" required>
+        <button class="btn btn-primary" id="uploadCSV" type="button">Upload CSV</button>
+        <span>Columns: title,price,description,images,sku,stock</span>
+      </div>
+    </section>
+
+    <section class="admin-card">
+      <h2>All Products</h2>
+      <table id="productsTable">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Price</th>
+            <th>SKU</th>
+            <th>Stock</th>
+            <th>Images</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/dashboard.js"></script>
+</body>
+</html>
