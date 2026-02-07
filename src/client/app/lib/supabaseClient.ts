@@ -7,7 +7,7 @@ export function getSupabaseClient(): SupabaseClient {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("Supabase env not set. Please configure .env.local");
+    throw new Error("Supabase environment variables are not set. Please configure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in your .env.local file");
   }
   supabase = createClient(supabaseUrl, supabaseAnonKey);
   return supabase;
