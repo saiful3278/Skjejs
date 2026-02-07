@@ -1,0 +1,16 @@
+{
+  "name": "import",
+  "version": "1.0.0",
+  "description": "",
+  "main": "cm_products_to_csv.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.13.4",
+    "cheerio": "^1.2.0"
+  }
+}
