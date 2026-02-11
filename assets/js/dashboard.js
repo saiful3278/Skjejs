@@ -18,7 +18,7 @@ const viewLinks = document.querySelectorAll('#nav-popover a[data-view]');
 const navMenu = document.getElementById('nav-popover') || document.getElementById('nav-drawer');
 const filterCategorySelect = document.getElementById('filter-category-select');
 let currentCategoryFilter = '';
-const PRODUCTS_PAGE_SIZE = 500;
+const PRODUCTS_PAGE_SIZE = 100;
 let allProducts = [];
 let currentProductsPage = 1;
 let existingProductTitleSet = null;
@@ -140,14 +140,16 @@ async function loadProducts() {
 function renderProductsTablePage(page) {
   if (!tableBody) return;
   const total = allProducts.length;
-  const totalPages = total ? Math.ceil(total / PRODUCTS_PAGE_SIZE) : 1;
+  const filteredMode = !!currentCategoryFilter;
+  const effectivePageSize = filteredMode ? total || 1 : PRODUCTS_PAGE_SIZE;
+  const totalPages = total ? Math.ceil(total / effectivePageSize) : 1;
   if (page < 1) page = 1;
   if (page > totalPages) page = totalPages;
   currentProductsPage = page;
   tableBody.innerHTML = '';
   if (total > 0) {
-    const start = (page - 1) * PRODUCTS_PAGE_SIZE;
-    const end = Math.min(start + PRODUCTS_PAGE_SIZE, total);
+    const start = (page - 1) * effectivePageSize;
+    const end = Math.min(start + effectivePageSize, total);
     for (let i = start; i < end; i++) {
       const p = allProducts[i];
       if (p) {
