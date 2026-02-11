@@ -439,9 +439,46 @@ async function updateCsvDuplicateInfo(products) {
   duplicateInfoEl.style.color = 'var(--text-muted)';
   const supabase = await ensureSupabaseReady();
   if (!supabase) {
-    duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
-    duplicateInfoEl.style.color = 'var(--error)';
-    return;
+    if (Array.isArray(allProducts) && allProducts.length) {
+      const set = new Set(
+        allProducts
+          .map((p) => (p && (p.name || p.title)) ? String(p.name || p.title).trim().toLowerCase() : '')
+          .filter(Boolean)
+      );
+      existingProductTitleSet = set;
+      const count = products.reduce((acc, p) => {
+        const key = (p && p.title ? String(p.title) : '').trim().toLowerCase();
+        if (!key) return acc;
+        return set.has(key) ? acc + 1 : acc;
+      }, 0);
+      duplicateInfoEl.textContent = count > 0 ? `Rows with titles already in products: ${count}` : 'No titles in this file match existing products.';
+      duplicateInfoEl.style.color = count > 0 ? 'var(--error)' : 'var(--text-muted)';
+      return;
+    } else {
+      duplicateInfoEl.textContent = 'Checking using current list...';
+      duplicateInfoEl.style.color = 'var(--text-muted)';
+      try {
+        await loadProducts();
+        const set = new Set(
+          allProducts
+            .map((p) => (p && (p.name || p.title)) ? String(p.name || p.title).trim().toLowerCase() : '')
+            .filter(Boolean)
+        );
+        existingProductTitleSet = set;
+        const count = products.reduce((acc, p) => {
+          const key = (p && p.title ? String(p.title) : '').trim().toLowerCase();
+          if (!key) return acc;
+          return set.has(key) ? acc + 1 : acc;
+        }, 0);
+        duplicateInfoEl.textContent = count > 0 ? `Rows with titles already in products: ${count}` : 'No titles in this file match existing products.';
+        duplicateInfoEl.style.color = count > 0 ? 'var(--error)' : 'var(--text-muted)';
+        return;
+      } catch (_) {
+        duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
+        duplicateInfoEl.style.color = 'var(--error)';
+        return;
+      }
+    }
   }
   const PAGE_SIZE = 1000;
   let from = 0;
@@ -453,7 +490,6 @@ async function updateCsvDuplicateInfo(products) {
       .select('name,title')
       .range(from, from + PAGE_SIZE - 1);
     if (error) {
-      // Fallback: use already loaded products in this dashboard view
       if (Array.isArray(allProducts) && allProducts.length) {
         set = new Set(
           allProducts
@@ -461,10 +497,23 @@ async function updateCsvDuplicateInfo(products) {
             .filter(Boolean)
         );
         break;
+      } else {
+        duplicateInfoEl.textContent = 'Checking using current list...';
+        duplicateInfoEl.style.color = 'var(--text-muted)';
+        try {
+          await loadProducts();
+          set = new Set(
+            allProducts
+              .map((p) => (p && (p.name || p.title)) ? String(p.name || p.title).trim().toLowerCase() : '')
+              .filter(Boolean)
+          );
+          break;
+        } catch (_) {
+          duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
+          duplicateInfoEl.style.color = 'var(--error)';
+          return;
+        }
       }
-      duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
-      duplicateInfoEl.style.color = 'var(--error)';
-      return;
     }
     const chunk = data || [];
     loaded += chunk.length;
