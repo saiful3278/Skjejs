@@ -443,19 +443,35 @@ async function updateCsvDuplicateInfo(products) {
     duplicateInfoEl.style.color = 'var(--error)';
     return;
   }
-  const { data, error } = await supabase.from('products').select('*');
-  if (error) {
-    duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
-    duplicateInfoEl.style.color = 'var(--error)';
-    return;
-  }
+  const PAGE_SIZE = 1000;
+  let from = 0;
+  let totalCount = 0;
   const set = new Set();
-  (data || []).forEach((p) => {
-    const raw = (p && (p.name || p.title)) ? String(p.name || p.title) : '';
-    const key = raw.trim().toLowerCase();
-    if (!key) return;
-    set.add(key);
-  });
+  while (true) {
+    const { data, error, count } = await supabase
+      .from('products')
+      .select('name,title', { count: 'exact' })
+      .range(from, from + PAGE_SIZE - 1);
+    if (error) {
+      duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
+      duplicateInfoEl.style.color = 'var(--error)';
+      return;
+    }
+    if (typeof count === 'number' && count >= 0) totalCount = count;
+    (data || []).forEach((p) => {
+      const raw = (p && (p.name || p.title)) ? String(p.name || p.title) : '';
+      const key = raw.trim().toLowerCase();
+      if (!key) return;
+      set.add(key);
+    });
+    const loaded = from + ((data && data.length) || 0);
+    if (duplicateInfoEl && totalCount) {
+      duplicateInfoEl.textContent = `Checking... ${Math.min(loaded, totalCount)} / ${totalCount}`;
+      duplicateInfoEl.style.color = 'var(--text-muted)';
+    }
+    if (!data || data.length < PAGE_SIZE) break;
+    from += data.length;
+  }
   existingProductTitleSet = set;
   const count = products.reduce((acc, p) => {
     const key = (p && p.title ? String(p.title) : '').trim().toLowerCase();
@@ -504,7 +520,7 @@ if (csvFileInput && uploadCsvBtn) {
       uploadStatusEl.style.color = 'var(--text-main)';
     }
     existingProductTitleSet = null;
-    updateCsvDuplicateInfo(products);
+    await updateCsvDuplicateInfo(products);
     uploadCsvBtn.textContent = 'Start Upload';
     uploadCsvBtn.disabled = false;
   });
