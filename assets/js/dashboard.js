@@ -445,32 +445,41 @@ async function updateCsvDuplicateInfo(products) {
   }
   const PAGE_SIZE = 1000;
   let from = 0;
-  let totalCount = 0;
-  const set = new Set();
+  let loaded = 0;
+  let set = new Set();
   while (true) {
-    const { data, error, count } = await supabase
+    const { data, error } = await supabase
       .from('products')
-      .select('name,title', { count: 'exact' })
+      .select('name,title')
       .range(from, from + PAGE_SIZE - 1);
     if (error) {
+      // Fallback: use already loaded products in this dashboard view
+      if (Array.isArray(allProducts) && allProducts.length) {
+        set = new Set(
+          allProducts
+            .map((p) => (p && (p.name || p.title)) ? String(p.name || p.title).trim().toLowerCase() : '')
+            .filter(Boolean)
+        );
+        break;
+      }
       duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
       duplicateInfoEl.style.color = 'var(--error)';
       return;
     }
-    if (typeof count === 'number' && count >= 0) totalCount = count;
-    (data || []).forEach((p) => {
+    const chunk = data || [];
+    loaded += chunk.length;
+    chunk.forEach((p) => {
       const raw = (p && (p.name || p.title)) ? String(p.name || p.title) : '';
       const key = raw.trim().toLowerCase();
       if (!key) return;
       set.add(key);
     });
-    const loaded = from + ((data && data.length) || 0);
-    if (duplicateInfoEl && totalCount) {
-      duplicateInfoEl.textContent = `Checking... ${Math.min(loaded, totalCount)} / ${totalCount}`;
+    if (duplicateInfoEl) {
+      duplicateInfoEl.textContent = `Checking... loaded ${loaded}`;
       duplicateInfoEl.style.color = 'var(--text-muted)';
     }
-    if (!data || data.length < PAGE_SIZE) break;
-    from += data.length;
+    if (!chunk.length || chunk.length < PAGE_SIZE) break;
+    from += chunk.length;
   }
   existingProductTitleSet = set;
   const count = products.reduce((acc, p) => {
