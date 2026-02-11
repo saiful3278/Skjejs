@@ -438,9 +438,17 @@ async function updateCsvDuplicateInfo(products) {
   duplicateInfoEl.textContent = 'Checking against existing products...';
   duplicateInfoEl.style.color = 'var(--text-muted)';
   const supabase = await ensureSupabaseReady();
-  if (!supabase) return;
-  const { data, error } = await supabase.from('products').select('name,title');
-  if (error) return;
+  if (!supabase) {
+    duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
+    duplicateInfoEl.style.color = 'var(--error)';
+    return;
+  }
+  const { data, error } = await supabase.from('products').select('*');
+  if (error) {
+    duplicateInfoEl.textContent = 'Unable to check duplicates against existing products.';
+    duplicateInfoEl.style.color = 'var(--error)';
+    return;
+  }
   const set = new Set();
   (data || []).forEach((p) => {
     const raw = (p && (p.name || p.title)) ? String(p.name || p.title) : '';
@@ -496,7 +504,7 @@ if (csvFileInput && uploadCsvBtn) {
       uploadStatusEl.style.color = 'var(--text-main)';
     }
     existingProductTitleSet = null;
-    await updateCsvDuplicateInfo(products);
+    updateCsvDuplicateInfo(products);
     uploadCsvBtn.textContent = 'Start Upload';
     uploadCsvBtn.disabled = false;
   });
