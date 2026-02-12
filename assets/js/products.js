@@ -137,6 +137,120 @@ let currentProducts = [];
 let currentPage = 1;
 let totalCount = 0;
 let totalPages = 1;
+let allProductsSearch = [];
+const searchInputEl = document.getElementById('search-input');
+const SYNONYMS = {
+  iphone: ['phone', 'iph', 'apple phone'],
+  '13pm': ['13 pro max'],
+  samsung: ['galaxy', 'sam'],
+  lcd: ['display', 'screen'],
+  oled: ['amoled'],
+  battery: ['batt', 'accu']
+};
+function norm(s) {
+  return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
+}
+function toks(s) {
+  return norm(s).split(/\s+/).filter(Boolean);
+}
+function expandToken(t) {
+  const base = SYNONYMS[t] || [];
+  return [t].concat(base);
+}
+function productTokens(p) {
+  const base = [p.name || ''].concat(p.description ? [p.description] : []);
+  const set = new Set();
+  base.forEach((v) => {
+    toks(v).forEach((w) => {
+      set.add(w);
+      expandToken(w).forEach((z) => toks(z).forEach((y) => set.add(y)));
+    });
+  });
+  return Array.from(set);
+}
+function scoreProduct(qTokens, pTokens) {
+  let s = 0;
+  for (const q of qTokens) {
+    const qExp = expandToken(q).flatMap((e) => toks(e));
+    for (const pt of pTokens) {
+      if (pt === q) s += 3;
+      else if (pt.includes(q) || q.includes(pt)) s += 1;
+    }
+    for (const qe of qExp) {
+      for (const pt of pTokens) {
+        if (pt === qe) s += 2;
+        else if (pt.includes(qe) || qe.includes(pt)) s += 1;
+      }
+    }
+  }
+  return s;
+}
+async function loadAllProductsForSearch() {
+  const client = window.supabaseClient;
+  if (!client) {
+    allProductsSearch = products.slice();
+    return;
+  }
+  const pageSize = 1000;
+  let from = 0;
+  let all = [];
+  while (true) {
+    const { data, error } = await client
+      .from('products')
+      .select('id,name,price,image_url,description')
+      .order('created_at', { ascending: false })
+      .range(from, from + pageSize - 1);
+    if (error) break;
+    if (!data || !data.length) break;
+    const list = data.map((p) => ({
+      id: p.id,
+      name: p.name,
+      price: Number(p.price),
+      image_url: p.image_url || '',
+      description: p.description || ''
+    }));
+    all = all.concat(list);
+    if (data.length < pageSize) break;
+    from += pageSize;
+    if (all.length >= 5000) break;
+  }
+  allProductsSearch = all.length ? all : [];
+}
+function performSearch(q) {
+  const grid = document.querySelector('.product-grid');
+  if (!grid) return;
+  const query = norm(q);
+  if (!query) {
+    renderProducts(currentProducts);
+    renderPager();
+    return;
+  }
+  const qTokens = toks(query);
+  const base = allProductsSearch.length ? allProductsSearch : currentProducts.slice();
+  const scored = base
+    .map((p) => {
+      const s = scoreProduct(qTokens, productTokens(p));
+      return { p, s };
+    })
+    .filter((x) => x.s > 0)
+    .sort((a, b) => b.s - a.s)
+    .map((x) => x.p);
+  if (!scored.length) {
+    grid.innerHTML = '<div class="empty-cart">No products found.</div>';
+    const info = document.getElementById('page-info');
+    if (info) info.textContent = 'Page 1 of 1';
+    const prev = document.getElementById('prev-page');
+    const next = document.getElementById('next-page');
+    if (prev) prev.disabled = true;
+    if (next) next.disabled = true;
+    return;
+  }
+  currentProducts = scored;
+  totalCount = scored.length;
+  totalPages = 1;
+  renderProducts(currentProducts);
+  renderPager();
+}
 
 const gridEl = document.querySelector('.product-grid');
 if (gridEl) {
@@ -194,10 +308,12 @@ async function loadProducts(page = 1) {
 if (window.supabaseClient) {
   loadProducts(currentPage);
   loadCategories();
+  loadAllProductsForSearch();
 } else {
   window.addEventListener('supabase-ready', () => {
     loadProducts(currentPage);
     loadCategories();
+    loadAllProductsForSearch();
   });
 }
 
@@ -227,5 +343,10 @@ if (prevBtn) {
 if (nextBtn) {
   nextBtn.addEventListener('click', () => {
     if (currentPage < totalPages) loadProducts(currentPage + 1);
+  });
+}
+if (searchInputEl) {
+  searchInputEl.addEventListener('input', (e) => {
+    performSearch(e.target.value || '');
   });
 }
