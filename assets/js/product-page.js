@@ -253,11 +253,20 @@ async function loadProduct() {
   }
   const descriptionText = data.description || 'No description available.';
   if (descFullEl) descFullEl.textContent = descriptionText;
-  if (featureListEl && Array.isArray(data.features) && data.features.length) {
-    featureListEl.innerHTML = data.features
-      .slice(0, 5)
-      .map((f) => `<li class="feature-item"><span class="feature-icon">✓</span><span>${f}</span></li>`)
-      .join('');
+  if (featureListEl) {
+    if (Array.isArray(data.features) && data.features.length) {
+      featureListEl.innerHTML = data.features
+        .slice(0, 5)
+        .map((f) => `<li class="feature-item"><span class="feature-icon">✓</span><span>${f}</span></li>`)
+        .join('');
+    } else {
+      featureListEl.innerHTML = [
+        '1 month warranty',
+        'Self-damage not covered'
+      ]
+        .map((f) => `<li class="feature-item"><span class="feature-icon">✓</span><span>${f}</span></li>`)
+        .join('');
+    }
   }
   const paths = Array.isArray(data.images) && data.images.length ? data.images : (data.image_url ? [data.image_url] : []);
   const urls = paths.map((p) => productImageUrl(p)).filter(Boolean);
