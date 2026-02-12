@@ -189,6 +189,40 @@ img {
   margin-bottom: 6px;
 }
 
+.page-header #search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.page-header #search-bar input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+.page-header #search-bar button {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-main);
+  color: var(--text-main);
+  cursor: pointer;
+}
+.page-header #search-bar button:hover {
+  background: var(--bg-section);
+}
+.page-header #search-bar svg {
+  width: 18px;
+  height: 18px;
+}
+
 .filter-row {
   display: flex;
   align-items: center;

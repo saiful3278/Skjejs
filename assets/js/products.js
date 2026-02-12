@@ -139,6 +139,7 @@ let totalCount = 0;
 let totalPages = 1;
 let allProductsSearch = [];
 const searchInputEl = document.getElementById('search-input');
+const searchBtnEl = document.getElementById('search-btn');
 const SYNONYMS = {
   iphone: ['phone', 'iph', 'apple phone'],
   '13pm': ['13 pro max'],
@@ -221,6 +222,7 @@ function performSearch(q) {
   if (!grid) return;
   const query = norm(q);
   if (!query) {
+    currentPage = 1;
     renderProducts(currentProducts);
     renderPager();
     return;
@@ -248,6 +250,7 @@ function performSearch(q) {
   currentProducts = scored;
   totalCount = scored.length;
   totalPages = 1;
+  currentPage = 1;
   renderProducts(currentProducts);
   renderPager();
 }
@@ -345,8 +348,8 @@ if (nextBtn) {
     if (currentPage < totalPages) loadProducts(currentPage + 1);
   });
 }
-if (searchInputEl) {
-  searchInputEl.addEventListener('input', (e) => {
-    performSearch(e.target.value || '');
+if (searchBtnEl && searchInputEl) {
+  searchBtnEl.addEventListener('click', () => {
+    performSearch(searchInputEl.value || '');
   });
 }
