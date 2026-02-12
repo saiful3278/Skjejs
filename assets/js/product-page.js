@@ -31,6 +31,30 @@ let currentIndex = 0;
 let totalSlides = 0;
 let productData = null;
 
+function showSkeleton() {
+  if (slidesEl) {
+    slidesEl.innerHTML = '<div class="skeleton-block skeleton-media"></div>';
+  }
+  if (titleEl) {
+    titleEl.innerHTML = '<span class="skeleton-line" style="width:72%"></span>';
+  }
+  if (priceEl) {
+    priceEl.innerHTML = '<span class="skeleton-line" style="width:40%"></span>';
+  }
+  if (stockEl) {
+    stockEl.innerHTML = '<span class="skeleton-line" style="width:50%"></span>';
+  }
+  if (skuEl) {
+    skuEl.innerHTML = '<span class="skeleton-line" style="width:30%"></span>';
+  }
+  if (featureListEl) {
+    featureListEl.innerHTML = ['60%','50%','40%'].map(w => `<li class="feature-item"><span class="skeleton-line" style="width:${w}"></span></li>`).join('');
+  }
+  if (descFullEl) {
+    descFullEl.innerHTML = ['95%','90%','85%'].map(w => `<div class="skeleton-line" style="width:${w}; height:12px"></div>`).join('');
+  }
+}
+
 function setSlide(i) {
   if (!slidesEl) return;
   currentIndex = Math.max(0, Math.min(i, totalSlides - 1));
@@ -174,6 +198,7 @@ async function loadRelated(currentId) {
 async function loadProduct() {
   const client = window.supabaseClient;
   if (!client || !titleEl || !priceEl || !mediaEl || !addBtn) return;
+  showSkeleton();
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
   if (!id) {
@@ -298,7 +323,7 @@ async function loadProduct() {
 }
 
 if (window.supabaseClient) {
-  loadProduct();
+  showSkeleton(); loadProduct();
 } else {
-  window.addEventListener('supabase-ready', loadProduct);
+  showSkeleton(); window.addEventListener('supabase-ready', loadProduct);
 }
