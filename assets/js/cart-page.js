@@ -2,13 +2,35 @@ const itemsContainer = document.querySelector('.cart-items');
 const totalEl = document.querySelector('.cart-total');
 const countEl = document.querySelector('.cart-count');
 
-function renderCart() {
+async function fetchServerPrices(ids) {
+  const client = window.supabaseClient;
+  if (!client || !Array.isArray(ids) || !ids.length) return {};
+  const { data, error } = await client
+    .from('products')
+    .select('id,price')
+    .in('id', ids);
+  if (error || !data) return {};
+  const map = {};
+  for (const row of data) {
+    map[String(row.id)] = Number(row.price);
+  }
+  return map;
+}
+
+async function renderCart() {
   const items = getCartItems();
   if (!itemsContainer) return;
+  let effectiveItems = items;
   if (items.length === 0) {
     itemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty.</div>';
   } else {
-    itemsContainer.innerHTML = items
+    const ids = Array.from(new Set(items.map((i) => String(i.id))));
+    const priceMap = await fetchServerPrices(ids);
+    const displayItems = items.map((i) => ({
+      ...i,
+      price: Number.isFinite(priceMap[String(i.id)]) ? priceMap[String(i.id)] : Number(i.price)
+    }));
+    itemsContainer.innerHTML = displayItems
       .map(
         (item) =>
           `<div class="cart-item" data-id="${item.id}">
@@ -24,8 +46,9 @@ function renderCart() {
           </div>`
       )
       .join('');
+    effectiveItems = displayItems;
   }
-  updateSummary(items);
+  updateSummary(effectiveItems);
 }
 
 window.renderCart = renderCart;
@@ -36,7 +59,8 @@ function updateSummary(items) {
     countEl.textContent = count;
   }
   if (totalEl) {
-    totalEl.textContent = formatRM(calculateTotal(items));
+    const total = items.reduce((sum, item) => sum + Number(item.price) * Number(item.quantity || 1), 0);
+    totalEl.textContent = formatRM(total);
   }
 }
 
@@ -44,7 +68,7 @@ if (itemsContainer) {
   itemsContainer.addEventListener('click', (event) => {
     const removeButton = event.target.closest('button[data-remove]');
     if (!removeButton) return;
-    const id = Number(removeButton.dataset.remove);
+    const id = removeButton.dataset.remove;
     removeFromCart(id);
     renderCart();
   });
@@ -52,7 +76,7 @@ if (itemsContainer) {
   itemsContainer.addEventListener('input', (event) => {
     const input = event.target.closest('input[data-id]');
     if (!input) return;
-    const id = Number(input.dataset.id);
+    const id = input.dataset.id;
     const quantity = Number(input.value);
     if (!Number.isFinite(quantity)) return;
     setItemQuantity(id, quantity);
@@ -60,4 +84,4 @@ if (itemsContainer) {
   });
 }
 
-renderCart();
+(async () => { await renderCart(); })();

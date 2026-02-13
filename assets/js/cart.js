@@ -1,5 +1,9 @@
 const CART_KEY = 'shop_cart';
 
+function sameId(a, b) {
+  return String(a) === String(b);
+}
+
 function getCartItems() {
   const data = localStorage.getItem(CART_KEY);
   const items = data ? JSON.parse(data) : [];
@@ -17,7 +21,7 @@ function saveCartItems(items) {
 
 function addToCart(product) {
   const items = getCartItems();
-  const existing = items.find((item) => item.id === product.id);
+  const existing = items.find((item) => sameId(item.id, product.id));
   if (existing) {
     existing.quantity += 1;
   } else {
@@ -28,7 +32,7 @@ function addToCart(product) {
 }
 
 function removeFromCart(id) {
-  const items = getCartItems().filter((item) => item.id !== id);
+  const items = getCartItems().filter((item) => !sameId(item.id, id));
   saveCartItems(items);
   updateCartBadge();
 }
@@ -36,7 +40,7 @@ function removeFromCart(id) {
 function setItemQuantity(id, quantity) {
   const items = getCartItems()
     .map((item) =>
-      item.id === id ? { ...item, quantity: Number(quantity) } : item
+      sameId(item.id, id) ? { ...item, quantity: Number(quantity) } : item
     )
     .filter((item) => item.quantity > 0);
   saveCartItems(items);
