@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Checkout</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="checkout-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="cart.html">Cart</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <h1>Checkout</h1>
+      <p>Complete your purchase.</p>
+    </section>
+    
+    <div class="cart-panel">
+      <div class="cart-items">
+        <div class="section-title">Order Summary</div>
+        <div id="checkout-items"></div>
+      </div>
+      <div class="cart-summary">
+        
+        <div class="delivery-card checkout-card">
+          <div class="section-title">Delivery Information</div>
+          <label class="delivery-field">
+            <span>Email</span>
+            <input type="email" id="buyer-email" placeholder="you@example.com" required>
+          </label>
+          <label class="delivery-field">
+            <span>Full Name</span>
+            <input type="text" id="buyer-name" placeholder="Full name" required>
+          </label>
+          <label class="delivery-field">
+            <span>Phone Number</span>
+            <input type="tel" id="buyer-phone" placeholder="Phone" required>
+          </label>
+          <label class="delivery-field">
+            <span>Street</span>
+            <input type="text" id="buyer-street" placeholder="Street address" required>
+          </label>
+          <label class="delivery-field">
+            <span>Postcode</span>
+            <input type="text" id="buyer-postcode" placeholder="Postcode" required>
+          </label>
+          <label class="delivery-field">
+            <span>State</span>
+            <select id="buyer-state" required>
+              <option value="">Select State</option>
+              <option>Johor</option>
+              <option>Kedah</option>
+              <option>Kelantan</option>
+              <option>Melaka</option>
+              <option>Negeri Sembilan</option>
+              <option>Pahang</option>
+              <option>Perak</option>
+              <option>Perlis</option>
+              <option>Pulau Pinang</option>
+              <option>Sabah</option>
+              <option>Sarawak</option>
+              <option>Selangor</option>
+              <option>Terengganu</option>
+              <option>Kuala Lumpur</option>
+              <option>Putrajaya</option>
+              <option>Labuan</option>
+            </select>
+          </label>
+          <input type="hidden" id="buyer-address">
+        </div>
+        
+        <div class="checkout-card">
+          <div class="section-title">Payment Method</div>
+          <div class="option-grid">
+            <label class="option disabled">
+              <input type="radio" name="payment-method" value="cards" disabled>
+              <span>Credit/Debit Card</span>
+              <span class="option-note">Unavailable</span>
+            </label>
+            <label class="option disabled">
+              <input type="radio" name="payment-method" value="paypal" disabled>
+              <span>PayPal</span>
+              <span class="option-note">Unavailable</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="payment-method" value="duitnow" checked>
+              <span>DuitNow</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="checkout-card">
+          <div class="section-title">Delivery Option</div>
+          <div class="option-grid">
+            <label class="option">
+              <input type="radio" name="delivery-option" value="lalamove" checked>
+              <span>Lalamove</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="delivery-option" value="gdex">
+              <span>GDEX</span>
+            </label>
+            <label class="option">
+              <input type="radio" name="delivery-option" value="jnt">
+              <span>J&T Express</span>
+            </label>
+          </div>
+        </div>
+        
+        <div class="summary-row">
+          <span>Items</span>
+          <span class="cart-count">0</span>
+        </div>
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span class="cart-subtotal">RM 0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span class="shipping-cost">RM 0.00</span>
+        </div>
+        <div class="summary-row">
+          <span>Total</span>
+          <span class="cart-total">RM 0.00</span>
+        </div>
+        
+        <button class="btn btn-primary btn-wide" type="button" id="place-order-btn">Place Order</button>
+      </div>
+    </div>
+  </main>
+  
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/checkout-page.js"></script>
+  <script src="assets/js/checkout.js"></script>
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>

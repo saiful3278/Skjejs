@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Orders Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body class="admin-compact">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <a class="brand" href="../index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="../dashboard.html">Dashboard</a>
+          <a href="orders.html">Orders</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="page-header">
+      <h1>Orders</h1>
+      <p>Update order and payment statuses.</p>
+    </section>
+    <section class="admin-card">
+      <h2>Overview</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Orders</div>
+          <div class="stat-value" id="orders-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Payment</div>
+          <div class="stat-value" id="orders-pending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Paid</div>
+          <div class="stat-value" id="orders-paid">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Shipped</div>
+          <div class="stat-value" id="orders-shipped">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Delivered</div>
+          <div class="stat-value" id="orders-delivered">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cancelled</div>
+          <div class="stat-value" id="orders-cancelled">0</div>
+        </div>
+      </div>
+    </section>
+    <section class="admin-card">
+      <table class="table" id="ordersTable" style="width:100%;">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- JS populates rows -->
+        </tbody>
+      </table>
+    </section>
+  </main>
+  <script src="../assets/js/env.js"></script>
+  <script type="module" src="../assets/js/supabase-client.js"></script>
+  <script src="../assets/js/currency.js"></script>
+  <script src="../assets/js/dashboard-orders.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</body>
+</html>

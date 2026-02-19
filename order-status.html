@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Status</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <meta http-equiv="Cache-Control" content="no-store" />
+</head>
+<body class="order-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="order-hero">
+      <div class="order-top">
+        <div class="order-title">
+          <h1>Order Status</h1>
+          <p id="order-id">Order: —</p>
+        </div>
+        <div class="order-meta">
+          <span id="order-date" class="muted">—</span>
+          <span id="status-chip" class="status-chip">—</span>
+        </div>
+      </div>
+      <div class="summary-grid">
+        <div class="summary-card">
+          <div class="label">Total</div>
+          <div id="order-total">RM 0.00</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Payment</div>
+          <div id="payment-status">—</div>
+        </div>
+        <div class="summary-card">
+          <div class="label">Order</div>
+          <div id="order-status">—</div>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-outline" href="index.html">Continue Shopping</a>
+      </div>
+    </section>
+    <section class="progress-card">
+      <div class="status-steps timeline" id="status-steps">
+        <div class="step" id="step-verify">
+          <div class="step-icon">1</div>
+          <div class="step-title">Verifying Payment</div>
+        </div>
+        <div class="step" id="step-paid">
+          <div class="step-icon">2</div>
+          <div class="step-title">Payment Verified</div>
+        </div>
+        <div class="step" id="step-shipped">
+          <div class="step-icon">3</div>
+          <div class="step-title">Shipped</div>
+        </div>
+        <div class="step" id="step-delivered">
+          <div class="step-icon">4</div>
+          <div class="step-title">Delivered</div>
+        </div>
+      </div>
+      <div class="progress-wrap">
+        <div class="progress-bar" id="progress-bar"></div>
+      </div>
+    </section>
+  </main>
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/order-status.js"></script>
+  <script src="assets/js/nav.js"></script>
+  </body>
+  </html>

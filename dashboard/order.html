@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Order Detail (Admin)</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body class="admin-compact">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <a class="brand" href="../index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="../dashboard.html">Dashboard</a>
+          <a href="orders.html">Orders</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <main class="container">
+    <section class="page-header">
+      <h1>Order Detail</h1>
+      <p>Admin view of a single order.</p>
+    </section>
+    <section class="admin-card">
+      <h2>Summary</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Order ID</div>
+          <div class="stat-value" id="order-id">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Date</div>
+          <div class="stat-value" id="order-date">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total</div>
+          <div class="stat-value" id="order-total">RM 0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Order Status</div>
+          <div class="stat-value" id="order-status">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Payment Status</div>
+          <div class="stat-value" id="payment-status">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Customer Email</div>
+          <div class="stat-value" id="customer-email">—</div>
+        </div>
+      </div>
+    </section>
+    <section class="admin-card">
+      <h2>Items</h2>
+      <table class="table" id="itemsTable">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Unit Price</th>
+            <th>Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- JS populates rows -->
+        </tbody>
+      </table>
+    </section>
+    <section class="admin-card">
+      <h2>Controls</h2>
+      <div class="admin-actions">
+        <button class="btn" id="btn-mark-paid" type="button">Mark Paid</button>
+        <button class="btn" id="btn-mark-shipped" type="button">Mark Shipped</button>
+        <button class="btn" id="btn-mark-delivered" type="button">Mark Delivered</button>
+        <button class="btn" id="btn-cancel-order" type="button">Cancel Order</button>
+      </div>
+    </section>
+    <section class="admin-card">
+      <a class="btn" href="orders.html">← Back to Orders</a>
+    </section>
+  </main>
+  <script src="../assets/js/env.js"></script>
+  <script type="module" src="../assets/js/supabase-client.js"></script>
+  <script src="../assets/js/currency.js"></script>
+  <script src="../assets/js/dashboard-order.js"></script>
+  <script src="../assets/js/nav.js"></script>
+</body>
+</html>

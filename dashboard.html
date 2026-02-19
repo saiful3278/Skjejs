@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="assets/css/style.css?v=2">
+  <link rel="stylesheet" href="assets/css/dashboard.css?v=2">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="#" data-view="home">Home</a>
+          <a href="#" data-view="products">Products</a>
+          <a href="#" data-view="categories">Categories</a>
+          <a href="dashboard/orders.html">Orders</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <h1>Admin Dashboard</h1>
+      <p>Manage products</p>
+    </section>
+
+    <section class="admin-card" id="home-section" style="display:none">
+      <h2>Dashboard Home</h2>
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Sales</div>
+          <div class="stat-value" id="stats-sales">RM 0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Products</div>
+          <div class="stat-value" id="stats-products">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total Stock</div>
+          <div class="stat-value" id="stats-stock">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Average Price</div>
+          <div class="stat-value" id="stats-avg-price">RM 0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Inventory Value</div>
+          <div class="stat-value" id="stats-inventory">RM 0.00</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="products-section">
+      <div class="admin-actions">
+        <button class="btn btn-primary" id="toggle-single">Upload Product</button>
+        <button class="btn btn-outline" id="toggle-bulk">Bulk Upload CSV</button>
+      </div>
+
+      <section class="admin-card" id="single-card" style="display:none">
+      <h2>Upload Product</h2>
+      <form class="admin-form" id="singleUpload">
+        <input type="text" name="title" placeholder="Title" required>
+        <input type="number" name="price" placeholder="Price" required>
+        <input type="text" name="sku" placeholder="SKU" required>
+        <input type="number" name="stock" placeholder="Stock" required>
+        <input type="text" name="images" placeholder="Image URLs (comma separated)">
+        <button class="btn btn-primary" type="submit">Upload Product</button>
+      </form>
+      </section>
+
+      <section class="admin-card" id="bulk-card" style="display:none">
+      <h2>Bulk Upload CSV</h2>
+      <div class="admin-form">
+        <input type="file" id="csvUpload" accept=".csv" required>
+        <div id="upload-status" style="font-size: 0.9em; margin-top: 5px; color: var(--text-muted);"></div>
+        <div id="duplicate-info" style="font-size: 0.9em; margin-top: 4px; color: var(--text-muted);"></div>
+        <label style="display: flex; align-items: center; gap: 6px; margin: 6px 0; font-size: 0.9em;">
+          <input type="checkbox" id="ignore-duplicate-title">
+          <span>Ignore rows with duplicate titles in this CSV</span>
+        </label>
+        <div id="upload-progress" style="height: 8px; background: var(--border); border-radius: 6px; overflow: hidden; margin: 8px 0; display: none;">
+          <div id="upload-progress-bar" style="height: 100%; width: 0%; background: var(--primary);"></div>
+        </div>
+        <div id="upload-progress-label" style="font-size: 0.9em; color: var(--text-muted); display: none;">0%</div>
+        <button class="btn btn-primary" id="uploadCSV" type="button" disabled>Select File</button>
+        <span>Columns: title,price,description,images,sku,stock,category (or categories)</span>
+      </div>
+      </section>
+
+      <section class="admin-card">
+      <h2>All Products <span style="font-size: 0.8em; font-weight: normal; margin-left: 10px;">(Total: <span id="list-total-products">0</span>)</span></h2>
+      
+      <div id="products-filter-bar" class="bulk-toolbar" style="margin-bottom: 10px;">
+        <span>Filter Category:</span>
+        <select id="filter-category-select">
+          <option value="">All</option>
+          <option value="UNCATEGORIZED">UNCATEGORIZED</option>
+        </select>
+      </div>
+      
+      <div id="bulk-toolbar" class="bulk-toolbar" style="display:none">
+        <span><b id="selected-count">0</b> Selected</span>
+        <select id="bulk-category-select">
+          <option value="">Select Category...</option>
+        </select>
+        <button id="btn-bulk-category" class="btn btn-outline">Set Category</button>
+        <button id="btn-bulk-auto" class="btn btn-outline">Auto Detect</button>
+        <span id="auto-detect-status" style="font-size: 0.9em; color: var(--text-muted);"></span>
+        <button id="btn-duplicate-check" class="btn btn-outline">Duplicate Checker</button>
+        <button id="btn-bulk-delete" class="btn btn-primary" style="background: #e53e3e; border-color: #e53e3e;">Delete Selected</button>
+      </div>
+
+      <table id="productsTable">
+        <thead>
+          <tr>
+            <th class="col-shrink"><input type="checkbox" id="select-all"></th>
+            <th>Title</th>
+            <th class="col-shrink">Price</th>
+            <th class="col-shrink">SKU</th>
+            <th class="col-shrink">Stock</th>
+            <th class="col-shrink">Category</th>
+            <th class="col-shrink">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- JS populates rows -->
+        </tbody>
+      </table>
+      <div id="products-pagination" style="margin-top: 10px; display: flex; align-items: center; gap: 10px; justify-content: flex-end;">
+        <button id="products-prev" class="btn btn-outline" type="button" disabled>Previous</button>
+        <span id="products-page-info" style="font-size: 0.9em; color: var(--text-muted);">Page 1</span>
+        <button id="products-next" class="btn btn-outline" type="button" disabled>Next</button>
+      </div>
+      </section>
+      <div id="product-edit-layer" class="modal-backdrop" style="display:none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3>Edit Product</h3>
+            <button type="button" class="btn btn-outline" id="btn-close-product-edit">Close</button>
+          </div>
+          <form id="edit-product-form" class="admin-form" style="margin-top: 10px;">
+            <input type="hidden" id="edit-product-id">
+            <label>
+              <span>Name</span>
+              <input type="text" id="edit-product-name" placeholder="Product Name" required>
+            </label>
+            <label>
+              <span>Price</span>
+              <input type="number" step="0.01" id="edit-product-price" placeholder="Price" required>
+            </label>
+            <div style="display:flex; gap:10px;">
+              <button type="submit" class="btn btn-primary" id="btn-save-product-edit">Save Changes</button>
+              <button type="button" class="btn btn-outline" id="btn-cancel-product-edit">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+    <section id="categories-section" style="display:none">
+      <div class="admin-card">
+        <h2 id="category-form-title">Manage Categories</h2>
+        <div class="admin-form" style="margin-bottom: 20px;">
+          <form id="create-category-form" style="display: grid; gap: 10px; max-width: 500px;">
+            <input type="hidden" id="edit-category-id">
+            <input type="hidden" id="existing-category-image">
+            <input type="text" id="new-category-name" placeholder="Category Name" required>
+            <input type="file" id="new-category-file" accept="image/*" required>
+            <textarea id="new-category-desc" placeholder="Description (Optional)" rows="2" style="padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit;"></textarea>
+            <div style="display: flex; gap: 10px;">
+              <button type="submit" class="btn btn-primary" id="btn-save-category">Add Category</button>
+              <button type="button" class="btn btn-outline" id="btn-cancel-edit" style="display:none">Cancel</button>
+            </div>
+          </form>
+        </div>
+        
+        <table id="categoriesTable">
+          <thead>
+            <tr>
+              <th style="width: 50px;">No.</th>
+              <th style="width: 60px;">Image</th>
+              <th>Name</th>
+              <th>Description</th>
+              <th style="width: 110px;">Products</th>
+              <th style="width: 150px;">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Categories loaded here -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="category-edit-layer" class="modal-backdrop" style="display:none;">
+        <div class="modal-card">
+          <div class="modal-header">
+            <h3>Edit Category</h3>
+            <button type="button" class="btn btn-outline" id="btn-close-edit-modal">Close</button>
+          </div>
+          <form id="edit-category-form" class="admin-form" style="margin-top: 10px;">
+            <input type="hidden" id="edit-modal-id">
+            <input type="hidden" id="edit-existing-image">
+            <label>
+              <span>Name</span>
+              <input type="text" id="edit-category-name" placeholder="Category Name" required>
+            </label>
+            <label>
+              <span>Image</span>
+              <input type="file" id="edit-category-file" accept="image/*">
+            </label>
+            <label>
+              <span>Description</span>
+              <textarea id="edit-category-desc" rows="2" style="padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-family: inherit;"></textarea>
+            </label>
+            <div style="display:flex; gap:10px;">
+              <button type="submit" class="btn btn-primary" id="btn-save-edit">Save Changes</button>
+              <button type="button" class="btn btn-outline" id="btn-cancel-edit-modal">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/dashboard.js?v=4"></script>
+  <script src="assets/js/nav.js?v=2"></script>
+</body>
+</html>

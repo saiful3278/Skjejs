@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html" aria-label="Home">
+          <img src="public/new app bar logo.svg" alt="Logo" class="brand-logo">
+        </a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="cart.html">Cart</a>
+          <a href="checkout.html">Checkout</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="categories">
+      <div class="row-header">
+        <h2>Categories</h2>
+      </div>
+      <div class="hscroll" id="category-row"></div>
+    </section>
+    <section class="page-header" id="products">
+      <div id="search-bar">
+        <input id="search-input" type="text" placeholder="Search products">
+        <button id="search-btn" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle>
+            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+          </svg>
+        </button>
+      </div>
+      <p>Browse our latest items.</p>
+    </section>
+    <section class="product-grid"></section>
+    <div class="pager">
+      <button class="page-btn" id="prev-page" type="button">Prev</button>
+      <span class="page-info" id="page-info">Page 1</span>
+      <button class="page-btn" id="next-page" type="button">Next</button>
+    </div>
+  </main>
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>

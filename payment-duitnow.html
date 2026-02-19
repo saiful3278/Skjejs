@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DuitNow Payment</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="payment-page">
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="cart.html">Cart</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="page-header">
+      <h1>DuitNow Payment</h1>
+      <p>Scan the QR to pay with DuitNow.</p>
+    </section>
+
+    <div class="checkout-card">
+      <div class="section-title">Scan DuitNow QR</div>
+      <div id="qr-wrap">
+        <img id="duitnow-qr" alt="DuitNow QR" style="max-width: 280px; border-radius: 12px; display:none;">
+        <div id="qr-placeholder" style="padding: 24px; border: 2px dashed var(--border); border-radius: 12px; color: var(--text-muted);">
+          QR not configured. Please contact support.
+        </div>
+      </div>
+      <div class="pay-info">
+        <div class="info-row">
+          <span>Amount</span>
+          <span id="pay-amount" class="price">RM 0.00</span>
+        </div>
+        <div class="info-row">
+          <span>Order ID</span>
+          <div class="info-row-right">
+            <span id="pay-order-ref" class="price">—</span>
+            <button id="copy-order-ref" type="button" class="btn" aria-label="Copy">Copy</button>
+          </div>
+        </div>
+        <div class="info-row">
+          <span>Time Left (to pay in 30 min)</span>
+          <span id="pay-time-left">—</span>
+        </div>
+      </div>
+      <div id="paid-wrap" style="display:none; text-align:center; padding:24px;">
+        <div style="display:inline-flex; align-items:center; justify-content:center; width:84px; height:84px; border-radius:50%; border:4px solid var(--success); color:var(--success); margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" width="42" height="42" aria-hidden="true">
+            <path d="M20 6L9 17l-5-5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </div>
+        <div style="font-size:20px; font-weight:800; color:var(--success);">Paid</div>
+      </div>
+      <p class="text-muted" style="margin-top:12px; text-align:center;">
+        Please write your order number in reference to speed up transactions.
+      </p>
+    </div>
+  </main>
+
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/nav.js"></script>
+  <script src="assets/js/duitnow.js"></script>
+</body>
+</html>

@@ -1,0 +1,365 @@
+body {
+  background: var(--bg-section);
+}
+
+.admin-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.admin-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.admin-card h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.admin-form {
+  display: grid;
+  gap: 10px;
+}
+
+.admin-form label {
+  display: grid;
+  gap: 6px;
+}
+
+.admin-form input,
+.admin-form select {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+thead {
+  background: var(--bg-section);
+}
+
+th, td {
+  padding: 8px 8px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  font-size: 14px;
+}
+
+.col-shrink {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.col-expand {
+  width: 100%;
+}
+
+/* Fix bulk toolbar overflow */
+.bulk-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  background: var(--bg-section);
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+}
+
+.bulk-toolbar select {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  min-width: 150px;
+}
+
+/* Ensure table expands title properly */
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Orders table column sizing to prevent overlap */
+#ordersTable th,
+#ordersTable td {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#ordersTable th:nth-child(1),
+#ordersTable td:nth-child(1) { /* Order ID */
+  width: 36ch;
+}
+#ordersTable th:nth-child(2),
+#ordersTable td:nth-child(2) { /* Date */
+  width: 12ch;
+}
+#ordersTable th:nth-child(3),
+#ordersTable td:nth-child(3) { /* Status */
+  width: 14ch;
+}
+#ordersTable th:nth-child(4),
+#ordersTable td:nth-child(4) { /* Actions */
+  width: 1%;
+}
+tbody tr:hover {
+  background: var(--bg-section);
+}
+
+#categoriesTable th,
+#categoriesTable td {
+  vertical-align: top;
+}
+
+#categoriesTable td:nth-child(2) img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+#categoriesTable td:nth-child(3),
+#categoriesTable td:nth-child(4) {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+#categoriesTable td:nth-child(4) > div {
+  max-width: none !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+}
+
+#categoriesTable td:nth-child(5) {
+  white-space: nowrap;
+}
+
+#productsTable th:nth-child(2),
+#productsTable td:nth-child(2) {
+  width: auto;
+  overflow: visible;
+  white-space: normal;
+  text-overflow: clip;
+}
+
+/* Compact price column */
+#productsTable th:nth-child(3),
+#productsTable td:nth-child(3) {
+  width: 80px;
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.img-cell img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.stat-label {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.btn.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.85;
+  display: inline-flex;
+  align-items: center;
+}
+.btn.loading::after {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 8px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.modal-card {
+  background: var(--bg-main);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  width: 90%;
+  max-width: 520px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  animation: modalIn .18s ease-out;
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+@media (max-width: 720px) {
+  .admin-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .admin-actions .btn {
+    width: 100%;
+  }
+  .admin-card {
+    padding: 12px;
+  }
+  .admin-form input,
+  .admin-form select {
+    width: 100%;
+  }
+  #productsTable {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #categoriesTable {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #ordersTable {
+    display: block;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  #productsTable th,
+  #productsTable td {
+    white-space: nowrap;
+    min-width: 120px;
+  }
+  #categoriesTable th,
+  #categoriesTable td {
+    white-space: nowrap;
+    min-width: 120px;
+  }
+  #ordersTable th,
+  #ordersTable td {
+    white-space: nowrap;
+    min-width: 120px;
+  }
+  #productsTable th:nth-child(2),
+  #productsTable td:nth-child(2) {
+    white-space: normal;
+  }
+  #categoriesTable td:nth-child(3),
+  #categoriesTable td:nth-child(4) {
+    white-space: normal;
+  }
+  #productsTable th:nth-child(3),
+  #productsTable td:nth-child(3) {
+    min-width: 80px;
+    max-width: 80px;
+  }
+  #categoriesTable td:nth-child(5) {
+    white-space: normal;
+  }
+  #categoriesTable td:nth-child(5) .btn {
+    display: inline-block;
+    margin: 4px 0;
+  }
+  #create-category-form > div,
+  #edit-category-form > div {
+    flex-wrap: wrap;
+  }
+  #create-category-form > div .btn,
+  #edit-category-form > div .btn {
+    width: 100%;
+  }
+}
+
+/* Compact admin order view */
+.admin-compact .page-header h1 {
+  font-size: 20px;
+}
+.admin-compact .page-header p {
+  font-size: 13px;
+}
+.admin-compact .admin-card {
+  padding: 12px;
+}
+.admin-compact .admin-card h2 {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+.admin-compact .stats-grid {
+  gap: 10px;
+}
+.admin-compact .stat-card {
+  padding: 12px;
+}
+.admin-compact .stat-label {
+  font-size: 12px;
+}
+.admin-compact .stat-value {
+  font-size: 16px;
+  font-weight: 600;
+}
+.admin-compact table th,
+.admin-compact table td {
+  font-size: 12px;
+  padding: 6px 8px;
+}
+.admin-compact .btn {
+  min-height: 36px;
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 8px;
+}

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Product Details</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html">Shop</a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="product-detail">
+      <div class="product-media" id="product-media">
+        <div class="media-slider" id="product-slider">
+          <div class="slides" id="product-slides"></div>
+          <button class="nav prev" id="slide-prev" aria-label="Previous">‹</button>
+          <button class="nav next" id="slide-next" aria-label="Next">›</button>
+        </div>
+        <h1 id="product-title" class="media-title">Product Name</h1>
+      </div>
+      <div class="product-info">
+        <div class="price-row">
+          <p class="price" id="product-price">RM 0.00</p>
+          <span class="discount-badge" id="discount-badge"></span>
+        </div>
+        <p class="stock" id="product-stock"></p>
+        <p class="sku" id="product-sku"></p>
+        <section class="key-features">
+          <h2 class="section-title">Key Features</h2>
+          <ul class="features" id="feature-list">
+            <li class="feature-item"><span class="feature-icon">✓</span><span>1 month warranty</span></li>
+            <li class="feature-item"><span class="feature-icon">✓</span><span>Self-damage not covered</span></li>
+          </ul>
+        </section>
+        <div class="purchase-section">
+          <div class="qty-control">
+            <button class="qty-btn" id="qty-minus" type="button">−</button>
+            <input class="qty-input" id="product-qty" type="number" min="1" value="1">
+            <button class="qty-btn" id="qty-plus" type="button">+</button>
+          </div>
+          <button class="btn btn-primary btn-wide" id="product-add" type="button">Add to Cart</button>
+          <button class="btn btn-outline btn-wide" id="product-buy" type="button">Buy Now</button>
+        </div>
+        <section class="product-description">
+          <details id="product-desc-details">
+            <summary>Read More</summary>
+            <div id="product-desc-full">Loading product...</div>
+          </details>
+        </section>
+        <section class="related-section">
+          <div class="row-header">
+            <h2 class="section-title">Related Products</h2>
+            <div class="row-actions">
+              <button class="scroll-btn" id="rel-prev" type="button">‹</button>
+              <button class="scroll-btn" id="rel-next" type="button">›</button>
+            </div>
+          </div>
+          <div class="hscroll" id="related-row"></div>
+        </section>
+        <section class="related-section" id="recently-viewed">
+          <div class="row-header">
+            <h2 class="section-title">Recently Viewed</h2>
+            <div class="row-actions">
+              <button class="scroll-btn" id="rv-prev" type="button">‹</button>
+              <button class="scroll-btn" id="rv-next" type="button">›</button>
+            </div>
+          </div>
+          <div class="hscroll" id="recent-row"></div>
+        </section>
+        <section class="delivery-returns">
+          <details id="delivery-details">
+            <summary>Delivery & Returns</summary>
+            <div class="delivery-card">
+              <label class="delivery-field">
+                <span>Delivery Location</span>
+                <input type="text" id="delivery-location" placeholder="City / Postcode">
+              </label>
+              <div class="delivery-row">
+                <span>Estimated Delivery</span>
+                <span id="delivery-date">—</span>
+              </div>
+              <div class="delivery-row">
+                <span>Shipping Cost</span>
+                <span id="shipping-cost">—</span>
+              </div>
+              <div class="policy">
+                <div id="return-policy">Non-refundable.</div>
+                <div id="warranty-info">1-month warranty. Self-damage not covered.</div>
+              </div>
+            </div>
+          </details>
+        </section>
+      </div>
+    </section>
+  </main>
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/product-page.js"></script>
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>
