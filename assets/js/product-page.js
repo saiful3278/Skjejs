@@ -227,25 +227,71 @@ async function loadProduct() {
     const res = await client.from('products').select('*').eq('id', id).single();
     if (!res.error && res.data) data = res.data;
   } else if (slugParam) {
+    const slugLower = slugParam.endsWith('-') ? slugParam : `${slugParam}-`;
     const token = firstToken(slugParam.replace(/-/g, ' '));
-    let candidates = [];
+    let found = null;
     if (token) {
-      const r1 = await client.from('products').select('*').ilike('name', `%${token}%`).order('created_at', { ascending: false }).limit(200);
-      if (!r1.error && Array.isArray(r1.data)) candidates = r1.data;
-      if (!candidates.length) {
-        const r2 = await client.from('products').select('*').ilike('title', `%${token}%`).order('created_at', { ascending: false }).limit(200);
-        if (!r2.error && Array.isArray(r2.data)) candidates = r2.data;
+      let from = 0;
+      const pageSize = 1000;
+      while (!found) {
+        const r1 = await client
+          .from('products')
+          .select('*')
+          .ilike('name', `%${token}%`)
+          .order('created_at', { ascending: false })
+          .range(from, from + pageSize - 1);
+        if (r1.error || !Array.isArray(r1.data) || !r1.data.length) break;
+        for (let i = 0; i < r1.data.length; i++) {
+          const p = r1.data[i];
+          const nm = p.name || p.title || '';
+          if (makeSlug(nm).toLowerCase() === slugLower) { found = p; break; }
+        }
+        if (found) break;
+        if (r1.data.length < pageSize) break;
+        from += pageSize;
+      }
+      if (!found) {
+        let from2 = 0;
+        const pageSize2 = 1000;
+        while (!found) {
+          const r2 = await client
+            .from('products')
+            .select('*')
+            .ilike('title', `%${token}%`)
+            .order('created_at', { ascending: false })
+            .range(from2, from2 + pageSize2 - 1);
+          if (r2.error || !Array.isArray(r2.data) || !r2.data.length) break;
+          for (let i = 0; i < r2.data.length; i++) {
+            const p = r2.data[i];
+            const nm = p.name || p.title || '';
+            if (makeSlug(nm).toLowerCase() === slugLower) { found = p; break; }
+          }
+          if (found) break;
+          if (r2.data.length < pageSize2) break;
+          from2 += pageSize2;
+        }
       }
     } else {
-      const r3 = await client.from('products').select('*').order('created_at', { ascending: false }).limit(200);
-      if (!r3.error && Array.isArray(r3.data)) candidates = r3.data;
+      let from3 = 0;
+      const pageSize3 = 1000;
+      while (!found) {
+        const r3 = await client
+          .from('products')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .range(from3, from3 + pageSize3 - 1);
+        if (r3.error || !Array.isArray(r3.data) || !r3.data.length) break;
+        for (let i = 0; i < r3.data.length; i++) {
+          const p = r3.data[i];
+          const nm = p.name || p.title || '';
+          if (makeSlug(nm).toLowerCase() === slugLower) { found = p; break; }
+        }
+        if (found) break;
+        if (r3.data.length < pageSize3) break;
+        from3 += pageSize3;
+      }
     }
-    const slugLower = slugParam.endsWith('-') ? slugParam : `${slugParam}-`;
-    const match = candidates.find((p) => {
-      const nm = p.name || p.title || '';
-      return makeSlug(nm).toLowerCase() === slugLower;
-    });
-    if (match) data = match;
+    if (found) data = found;
   }
   if (!data) {
     if (descFullEl) descFullEl.textContent = 'Product not found.';
