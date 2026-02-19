@@ -421,7 +421,7 @@ if (grid) {
         currentProducts.find((p) => String(p.id) === String(id)) ||
         null;
       const slug = makeSlug(product ? (product.name || '') : '');
-      window.location.href = `product.html?slug=${encodeURIComponent(slug)}`;
+      window.location.href = `/product?slug=${encodeURIComponent(slug)}`;
     }
   });
 }

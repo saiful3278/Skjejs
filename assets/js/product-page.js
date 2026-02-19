@@ -153,7 +153,7 @@ function miniCard(p) {
   const name = p.name || p.title || '';
   const url = productImageUrl(p.image_url || (Array.isArray(p.images) && p.images[0]) || '');
   const slug = makeSlug(name);
-  return `<a class="mini-card" href="product.html?slug=${encodeURIComponent(slug)}">
+  return `<a class="mini-card" href="/product?slug=${encodeURIComponent(slug)}">
     <div class="mini-thumb">${url ? `<img src="${url}" alt="${name}">` : ''}</div>
     <div class="mini-title">${name}</div>
     <div class="mini-price">${formatRM(Number(p.price || 0))}</div>
