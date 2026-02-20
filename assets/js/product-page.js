@@ -43,6 +43,30 @@ let productData = null;
   } catch (_) {}
 })();
 
+function earlyFromSlug() {
+  const params = new URLSearchParams(window.location.search);
+  const slugRaw = params.get('slug') || '';
+  const s = String(slugRaw || '').replace(/-+$/,'').replace(/-/g,' ').trim();
+  if (!s) return;
+  if (titleEl) titleEl.textContent = s;
+  const head = document.querySelector('head');
+  if (head) {
+    document.title = s + ' | DepotPartOri';
+    let m = document.querySelector('meta[name="description"]');
+    if (!m) { m = document.createElement('meta'); m.setAttribute('name','description'); head.appendChild(m); }
+    m.setAttribute('content', s);
+    let ogt = document.querySelector('meta[property="og:title"]');
+    if (!ogt) { ogt = document.createElement('meta'); ogt.setAttribute('property','og:title'); head.appendChild(ogt); }
+    ogt.setAttribute('content', s + ' | DepotPartOri');
+    let ogd = document.querySelector('meta[property="og:description"]');
+    if (!ogd) { ogd = document.createElement('meta'); ogd.setAttribute('property','og:description'); head.appendChild(ogd); }
+    ogd.setAttribute('content', s);
+    let ogu = document.querySelector('meta[property="og:url"]');
+    if (!ogu) { ogu = document.createElement('meta'); ogu.setAttribute('property','og:url'); head.appendChild(ogu); }
+    ogu.setAttribute('content', window.location.href);
+  }
+}
+
 function showSkeleton() {
   if (slidesEl) {
     slidesEl.innerHTML = '<div class="skeleton-block skeleton-media skeleton-static"></div>';
@@ -217,6 +241,7 @@ async function loadRelated(currentId) {
 async function loadProduct() {
   const client = window.supabaseClient;
   if (!client || !titleEl || !priceEl || !mediaEl || !addBtn) return;
+  earlyFromSlug();
   showSkeleton();
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -305,6 +330,7 @@ async function loadProduct() {
   };
   const title = productData.name;
   titleEl.textContent = title;
+  document.title = `${title} | DepotPartOri`;
   const price = productData.price;
   const saleRaw = data.sale_price ?? data.discount_price ?? null;
   const sale = saleRaw != null ? Number(saleRaw) : NaN;
@@ -336,6 +362,52 @@ async function loadProduct() {
   }
   const descriptionText = data.description || 'No description available.';
   if (descFullEl) descFullEl.textContent = descriptionText;
+  const head = document.querySelector('head');
+  if (head) {
+    let m = document.querySelector('meta[name="description"]');
+    if (!m) { m = document.createElement('meta'); m.setAttribute('name','description'); head.appendChild(m); }
+    m.setAttribute('content', descriptionText);
+    let ogt = document.querySelector('meta[property="og:title"]');
+    if (!ogt) { ogt = document.createElement('meta'); ogt.setAttribute('property','og:title'); head.appendChild(ogt); }
+    ogt.setAttribute('content', `${title} | DepotPartOri`);
+    let ogd = document.querySelector('meta[property="og:description"]');
+    if (!ogd) { ogd = document.createElement('meta'); ogd.setAttribute('property','og:description'); head.appendChild(ogd); }
+    ogd.setAttribute('content', descriptionText);
+    let ogi = document.querySelector('meta[property="og:image"]');
+    if (!ogi) { ogi = document.createElement('meta'); ogi.setAttribute('property','og:image'); head.appendChild(ogi); }
+    const firstImg = Array.isArray(data.images) && data.images.length ? productImageUrl(data.images[0]) : (data.image_url ? productImageUrl(data.image_url) : '');
+    ogi.setAttribute('content', firstImg || '');
+    let ogu = document.querySelector('meta[property="og:url"]');
+    if (!ogu) { ogu = document.createElement('meta'); ogu.setAttribute('property','og:url'); head.appendChild(ogu); }
+    ogu.setAttribute('content', window.location.href);
+    let ld = document.getElementById('product-schema');
+    const inStock = Number.isFinite(Number(data.stock)) ? (Number(data.stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock') : 'https://schema.org/InStock';
+    const schema = {
+      "@context":"https://schema.org",
+      "@type":"Product",
+      "name": title,
+      "description": descriptionText,
+      "image": firstImg || undefined,
+      "sku": data.sku || undefined,
+      "offers": {
+        "@type":"Offer",
+        "priceCurrency":"MYR",
+        "price": price,
+        "availability": inStock,
+        "url": window.location.href
+      }
+    };
+    const json = JSON.stringify(schema);
+    if (!ld) {
+      ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.id = 'product-schema';
+      ld.textContent = json;
+      head.appendChild(ld);
+    } else {
+      ld.textContent = json;
+    }
+  }
   if (featureListEl) {
     if (Array.isArray(data.features) && data.features.length) {
       featureListEl.innerHTML = data.features

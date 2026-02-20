@@ -121,12 +121,13 @@ function renderProducts(list) {
     .map(
       (p) => {
         const url = productImageUrl(p.image_url);
-        return `<article class="product-card" data-id="${p.id}">
+        const slug = makeSlug(p.name || '');
+        return `<a class="product-link" href="/product?slug=${encodeURIComponent(slug)}"><article class="product-card" data-id="${p.id}">
           <div class="product-thumb">${url ? `<img class="product-img" src="${url}" alt="${p.name}">` : ''}</div>
           <h3>${p.name}</h3>
           <p class="price">${formatRM(Number(p.price))}</p>
           <button class="btn btn-outline" type="button" data-id="${p.id}">Add to Cart</button>
-        </article>`;
+        </article></a>`;
       }
     )
     .join('');
