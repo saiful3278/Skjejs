@@ -223,7 +223,7 @@ function renderProducts(list) {
       (p) => {
         const url = productImageUrl(p.image_url);
         const slug = makeSlug(p.name || '');
-        return `<a class="product-link" href="/product?slug=${encodeURIComponent(slug)}"><article class="product-card" data-id="${p.id}">
+        return `<a class="product-link" href="product.html?slug=${encodeURIComponent(slug)}"><article class="product-card" data-id="${p.id}">
           <div class="product-thumb">${url ? `<img class="product-img" src="${url}" alt="${p.name}">` : ''}</div>
           <h3>${p.name}</h3>
           <p class="price">${formatRM(Number(p.price))}</p>
@@ -339,7 +339,7 @@ function init() {
         const id = card.dataset.id;
         const product = currentProducts.find((p) => String(p.id) === String(id)) || null;
         const slug = makeSlug(product ? (product.name || '') : '');
-        window.location.href = `/product?slug=${encodeURIComponent(slug)}`;
+        window.location.href = `product.html?slug=${encodeURIComponent(slug)}`;
       }
     });
   }
