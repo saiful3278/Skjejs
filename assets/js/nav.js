@@ -60,4 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (r) r.remove();
     }, 800);
   });
+  const y = document.getElementById('footer-year');
+  if (y) y.textContent = new Date().getFullYear();
 });
