@@ -68,7 +68,7 @@ img {
 }
 .brand-logo {
   display: block;
-  height: 40px;
+  height: 52px;
 }
 
 .left-group {
@@ -981,8 +981,8 @@ img {
 
  
 .site-footer {
-  background: #1f2937;
-  border-top: 1px solid #0b1320;
+  background: #374151;
+  border-top: 1px solid #2b3545;
   margin-top: 24px;
   color: #e5e7eb;
 }
@@ -1004,7 +1004,7 @@ img {
   margin-top: 6px;
 }
 .footer-logo {
-  height: 40px;
+  height: 52px;
   margin-bottom: 8px;
 }
 .footer-nav {
