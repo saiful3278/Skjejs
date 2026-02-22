@@ -113,14 +113,14 @@ async function loadAllCategoryProducts(categoryName, categoryId) {
       return;
     }
     if (!data || !data.length) break;
-    const list = data.map((p) => ({
+    const list = (data || []).map((p) => ({
       id: p.id,
       name: p.name,
       price: Number(p.price),
       image_url: p.image_url || '',
       description: p.description || ''
     }));
-    all = all.concat(list);
+    for (const item of list) all.push(item);
     if (data.length < pageSize) break;
     from += pageSize;
     if (all.length >= 5000) break;
@@ -326,6 +326,8 @@ function init() {
     grid.addEventListener('click', (event) => {
       const button = event.target.closest('button[data-id]');
       if (button) {
+        event.preventDefault(); // Prevent link navigation
+        event.stopPropagation();
         const productId = button.dataset.id;
         const product = currentProducts.find((p) => String(p.id) === String(productId));
         if (product) {
@@ -334,13 +336,7 @@ function init() {
         }
         return;
       }
-      const card = event.target.closest('.product-card');
-      if (card && card.dataset.id) {
-        const id = card.dataset.id;
-        const product = currentProducts.find((p) => String(p.id) === String(id)) || null;
-        const slug = makeSlug(product ? (product.name || '') : '');
-        window.location.href = `product.html?slug=${encodeURIComponent(slug)}`;
-      }
+      // Card click is handled by the wrapping <a> tag
     });
   }
 
@@ -379,6 +375,12 @@ function init() {
     });
   }
   if (searchBtnEl && searchInputEl) {
+    searchInputEl.addEventListener('keyup', (event) => {
+      if (event.key === 'Enter') {
+        searchBtnEl.click();
+      }
+    });
+
     searchBtnEl.addEventListener('click', async () => {
       const gridEl = document.querySelector('.product-grid');
       if (gridEl) renderProductsSkeleton(8);

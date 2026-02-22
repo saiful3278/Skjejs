@@ -46,10 +46,19 @@
   <main class="container">
     <section class="page-header">
       <h1>Products</h1>
+      <div id="search-bar" class="search-container">
+        <input id="search-input" type="text" placeholder="Search products...">
+        <button id="search-btn" type="button" aria-label="Search">
+          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle>
+            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+          </svg>
+        </button>
+      </div>
       <p>Browse our latest items.</p>
     </section>
 
-    <section class="product-grid"></section>
+    <section class="product-grid" id="main-product-grid"></section>
     <div class="pager">
       <button class="page-btn" id="prev-page" type="button">Prev</button>
       <span class="page-info" id="page-info">Page 1</span>

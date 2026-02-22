@@ -104,6 +104,7 @@ async function loadCategories() {
       renderCategories(list2);
     } else {
       renderCategories([]);
+      return;
     }
   } else {
     renderCategories(list);
@@ -111,7 +112,7 @@ async function loadCategories() {
 }
 
 function renderProducts(list) {
-  const grid = document.querySelector('.product-grid');
+  const grid = document.getElementById('main-product-grid');
   if (!grid) return;
   if (list.length === 0) {
     grid.innerHTML = '<div class="empty-cart">No products found.</div>';
@@ -134,7 +135,7 @@ function renderProducts(list) {
 }
 
 function renderProductsSkeleton(count = 8) {
-  const grid = document.querySelector('.product-grid');
+  const grid = document.getElementById('main-product-grid');
   if (!grid) return;
   const cards = Array.from({ length: count }).map(() => {
     return `<article class="product-card">
@@ -148,6 +149,7 @@ function renderProductsSkeleton(count = 8) {
 
 const PAGE_SIZE = 20;
 let currentProducts = [];
+let featuredProductsList = [];
 let currentPage = 1;
 let totalCount = 0;
 let totalPages = 1;
@@ -183,8 +185,10 @@ function mapQueryToken(t) {
   return t === 'iphone' ? 'phone' : t;
 }
 function scoreProduct(qTokens, p) {
-  const nameT = tokensFromText(p.name || '');
-  const descT = tokensFromText(p.description || '');
+  // Use pre-computed tokens if available
+  const nameT = p._nameToks || tokensFromText(p.name || '');
+  const descT = p._descToks || tokensFromText(p.description || '');
+  
   const nameStr = norm(p.name || '');
   const descStr = norm(p.description || '');
   const pFirst = firstToken(p.name || '');
@@ -228,10 +232,16 @@ function scoreProduct(qTokens, p) {
   s += cov * 2;
   return s;
 }
+
 async function loadAllProductsForSearch() {
   const client = window.supabaseClient;
   if (!client) {
-    allProductsSearch = products.slice().map((p) => ({ ...p, description: '' }));
+    allProductsSearch = products.slice().map((p) => ({
+      ...p,
+      description: '',
+      _nameToks: tokensFromText(p.name || ''),
+      _descToks: []
+    }));
     return;
   }
   const pageSize = 1000;
@@ -250,9 +260,14 @@ async function loadAllProductsForSearch() {
       name: p.name,
       price: Number(p.price),
       image_url: p.image_url || '',
-      description: p.description || ''
+      description: p.description || '',
+      // Pre-compute tokens to avoid doing it on every search keystroke
+      _nameToks: tokensFromText(p.name || ''),
+      _descToks: tokensFromText(p.description || '')
     }));
-    all = all.concat(list);
+    // Use push to avoid O(N^2) array copying
+    for (const item of list) all.push(item);
+    
     if (data.length < pageSize) break;
     from += pageSize;
     if (all.length >= 5000) break;
@@ -260,7 +275,7 @@ async function loadAllProductsForSearch() {
   allProductsSearch = all.length ? all : [];
 }
 function performSearch(q) {
-  const grid = document.querySelector('.product-grid');
+  const grid = document.getElementById('main-product-grid');
   if (!grid) return;
   const query = norm(q);
   if (!query) {
@@ -335,7 +350,7 @@ function performSearch(q) {
   renderPager();
 }
 
-const gridEl = document.querySelector('.product-grid');
+const gridEl = document.getElementById('main-product-grid');
 if (gridEl) {
   renderProductsSkeleton(8);
 }
@@ -389,43 +404,87 @@ async function loadProducts(page = 1) {
   renderPager();
 }
 
+async function loadFeaturedProducts() {
+  const grid = document.getElementById('featured-grid');
+  if (!grid) return;
+  
+  // Skeleton
+  grid.innerHTML = Array(4).fill('<article class="product-card"><div class="product-thumb"><div class="skeleton-block"></div></div><h3><span class="skeleton-line"></span></h3></article>').join('');
+
+  const client = window.supabaseClient;
+  
+  if (!client) {
+     featuredProductsList = (window.products || []).slice(0, 4);
+  } else {
+    // Fetch 4 items, let's just take the first 4 for now. 
+    // Ideally we would order by popularity or a 'featured' flag.
+    const { data } = await client
+      .from('products')
+      .select('id,name,price,image_url')
+      .limit(4); 
+    if (data) featuredProductsList = data;
+  }
+
+  if (!featuredProductsList.length) {
+    grid.innerHTML = '';
+    return;
+  }
+
+  grid.innerHTML = featuredProductsList.map(p => {
+        const url = productImageUrl(p.image_url);
+        const slug = makeSlug(p.name || '');
+        return `<a class="product-link" href="product.html?slug=${encodeURIComponent(slug)}"><article class="product-card" data-id="${p.id}">
+          <div class="product-thumb">${url ? `<img class="product-img" src="${url}" alt="${p.name}">` : ''}</div>
+          <h3>${p.name}</h3>
+          <p class="price">${formatRM(Number(p.price))}</p>
+          <button class="btn btn-outline" type="button" data-id="${p.id}">Add to Cart</button>
+        </article></a>`;
+  }).join('');
+}
+
 if (window.supabaseClient) {
   loadProducts(currentPage);
   loadCategories();
+  loadFeaturedProducts();
 } else {
   window.addEventListener('supabase-ready', () => {
     loadProducts(currentPage);
     loadCategories();
+    loadFeaturedProducts();
   });
 }
 
 
 
-const grid = document.querySelector('.product-grid');
-if (grid) {
-  grid.addEventListener('click', (event) => {
+const mainGrid = document.getElementById('main-product-grid');
+const featuredGrid = document.getElementById('featured-grid');
+
+function handleGridClick(event) {
     const button = event.target.closest('button[data-id]');
     if (button) {
+      event.preventDefault(); // Prevent link navigation if inside <a>
+      event.stopPropagation();
       const id = button.dataset.id;
       const product =
         currentProducts.find((p) => String(p.id) === String(id)) ||
+        featuredProductsList.find((p) => String(p.id) === String(id)) ||
         { id, name: '', price: 0, image_url: '' };
-      if (!product) return;
+      
+      // Basic check if product is valid
+      if (!product || !product.name) return;
+      
       addToCart(product);
       if (window.flyToCartFrom) window.flyToCartFrom(button);
       return;
     }
-    const card = event.target.closest('.product-card');
-    if (card && card.dataset.id) {
-      const id = card.dataset.id;
-      const product =
-        currentProducts.find((p) => String(p.id) === String(id)) ||
-        null;
-      const slug = makeSlug(product ? (product.name || '') : '');
-      window.location.href = `product.html?slug=${encodeURIComponent(slug)}`;
-    }
-  });
+    // Card click is handled by the wrapping <a> tag naturally, 
+    // but if we want JS navigation (like the old code did), we can keep it.
+    // The new HTML wraps <article> in <a class="product-link"> so we don't strictly need JS for navigation.
+    // But the old code had JS navigation. I'll leave the <a> tag doing the work.
 }
+
+if (mainGrid) mainGrid.addEventListener('click', handleGridClick);
+if (featuredGrid) featuredGrid.addEventListener('click', handleGridClick);
 
 const prevBtn = document.getElementById('prev-page');
 const nextBtn = document.getElementById('next-page');
@@ -462,12 +521,77 @@ if (nextBtn) {
   });
 }
 if (searchBtnEl && searchInputEl) {
+  // Listen for Enter key
+  searchInputEl.addEventListener('keyup', (event) => {
+    if (event.key === 'Enter') {
+      searchBtnEl.click();
+    }
+  });
+
   searchBtnEl.addEventListener('click', async () => {
-    const grid = document.querySelector('.product-grid');
+    const query = searchInputEl.value.trim();
+
+    // Check if we are on index.html (Home)
+    const path = window.location.pathname;
+    const isHome = path === '/' || path.endsWith('/index.html') || path.endsWith('/');
+    
+    if (isHome) {
+      // Redirect to products.html with query (or just products.html if empty)
+      if (query) {
+        window.location.href = `products.html?q=${encodeURIComponent(query)}`;
+      } else {
+        window.location.href = `products.html`;
+      }
+      return;
+    }
+
+    // Otherwise, perform search in-place (e.g. on products.html)
+    const grid = document.getElementById('main-product-grid');
     if (grid) renderProductsSkeleton(8);
     searchBtnEl.disabled = true;
+    
+    // If query is empty, we just reload default products
+    if (!query) {
+      isSearchMode = false;
+      await loadProducts(1);
+      searchBtnEl.disabled = false;
+      // Update URL to remove query param if present
+      const url = new URL(window.location);
+      url.searchParams.delete('q');
+      window.history.pushState({}, '', url);
+      return;
+    }
+
     if (!allProductsSearch.length) await loadAllProductsForSearch();
-    performSearch(searchInputEl.value || '');
+    performSearch(query);
     searchBtnEl.disabled = false;
+    
+    // Update URL with query param
+    const url = new URL(window.location);
+    url.searchParams.set('q', query);
+    window.history.pushState({}, '', url);
   });
 }
+
+// Check for URL query params on load (for products.html)
+window.addEventListener('DOMContentLoaded', async () => {
+  const params = new URLSearchParams(window.location.search);
+  const q = params.get('q');
+  if (q && searchInputEl) {
+    searchInputEl.value = q;
+    const grid = document.getElementById('main-product-grid');
+    if (grid) renderProductsSkeleton(8);
+
+    // Wait for Supabase/Products to be ready if needed, or just trigger search
+    // We need to ensure products are loaded or loadAllProductsForSearch is called
+    if (window.supabaseClient) {
+       if (!allProductsSearch.length) await loadAllProductsForSearch();
+       performSearch(q);
+    } else {
+       window.addEventListener('supabase-ready', async () => {
+         if (!allProductsSearch.length) await loadAllProductsForSearch();
+         performSearch(q);
+       });
+    }
+  }
+});

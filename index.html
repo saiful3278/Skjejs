@@ -45,30 +45,115 @@
   </header>
 
   <main class="container">
-    <section id="categories">
+    <!-- Hero Section -->
+    <section class="hero-wrapper">
+      <div class="hero-content">
+        <h1>Repair Your Mobile <br>With Confidence</h1>
+        <p>High-quality spare parts for iPhone, Samsung, Huawei & more. Fast delivery across Malaysia.</p>
+        <div id="search-bar" class="hero-search">
+          <input id="search-input" type="text" placeholder="Search for parts (e.g. iPhone 11 LCD)">
+          <button id="search-btn" type="button" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle>
+              <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <!-- Abstract shape or illustration could go here -->
+        <div class="floating-card card-1">
+          <div class="icon-box">📱</div>
+          <span>LCD Screens</span>
+        </div>
+        <div class="floating-card card-2">
+          <div class="icon-box">🔋</div>
+          <span>Batteries</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Banner -->
+    <section class="features-banner">
+      <div class="feature-col">
+        <div class="f-icon">🚚</div>
+        <div class="f-text">
+          <strong>Fast Delivery</strong>
+          <span>1-3 Days Shipping</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">🛡️</div>
+        <div class="f-text">
+          <strong>Warranty</strong>
+          <span>3 Months Warranty</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">💳</div>
+        <div class="f-text">
+          <strong>Secure Payment</strong>
+          <span>DuitNow / FPX</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">💬</div>
+        <div class="f-text">
+          <strong>Support</strong>
+          <span>Daily 9am - 6pm</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section id="categories" class="section-block">
       <div class="row-header">
-        <h2>Categories</h2>
+        <h2>Shop by Category</h2>
+        <div class="row-actions">
+           <!-- Scroll buttons managed by CSS/JS if needed, or just native scroll -->
+        </div>
       </div>
       <div class="hscroll" id="category-row"></div>
     </section>
-    <section class="page-header" id="products">
-      <div id="search-bar">
-        <input id="search-input" type="text" placeholder="Search products">
-        <button id="search-btn" type="button" aria-label="Search">
-          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle>
-            <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
-          </svg>
-        </button>
+
+    <!-- Featured Products -->
+    <section class="section-block">
+      <div class="row-header">
+        <h2>Featured Products</h2>
       </div>
-      <p>Browse our latest items.</p>
+      <div class="product-grid" id="featured-grid">
+         <!-- JS will populate this -->
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+      </div>
     </section>
-    <section class="product-grid"></section>
-    <div class="pager">
-      <button class="page-btn" id="prev-page" type="button">Prev</button>
-      <span class="page-info" id="page-info">Page 1</span>
-      <button class="page-btn" id="next-page" type="button">Next</button>
-    </div>
+
+    <!-- Main Products (Latest) -->
+    <section class="section-block" id="latest-products">
+      <div class="row-header">
+        <h2>Latest Arrivals</h2>
+      </div>
+      <div class="product-grid" id="main-product-grid"></div>
+      <div class="pager">
+        <button class="page-btn" id="prev-page" type="button">Prev</button>
+        <span class="page-info" id="page-info">Page 1</span>
+        <button class="page-btn" id="next-page" type="button">Next</button>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+      <div class="newsletter-content">
+        <h2>Join Our Newsletter</h2>
+        <p>Get the latest updates on new parts and exclusive offers.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </section>
   </main>
   <footer class="site-footer">
     <div class="container footer-inner">
