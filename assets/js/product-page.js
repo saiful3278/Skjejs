@@ -49,22 +49,60 @@ function earlyFromSlug() {
   const slugRaw = params.get('slug') || '';
   const s = String(slugRaw || '').replace(/-+$/,'').replace(/-/g,' ').trim();
   if (!s) return;
+  
+  // Title
   if (titleEl) titleEl.textContent = s;
   const head = document.querySelector('head');
   if (head) {
-    document.title = s + ' | DepotPartOri';
+    const titleText = s + ' | DepotPartOri';
+    document.title = titleText;
+    
+    // Description
     let m = document.querySelector('meta[name="description"]');
     if (!m) { m = document.createElement('meta'); m.setAttribute('name','description'); head.appendChild(m); }
     m.setAttribute('content', s);
+    
+    // OG Tags
     let ogt = document.querySelector('meta[property="og:title"]');
     if (!ogt) { ogt = document.createElement('meta'); ogt.setAttribute('property','og:title'); head.appendChild(ogt); }
-    ogt.setAttribute('content', s + ' | DepotPartOri');
+    ogt.setAttribute('content', titleText);
+    
     let ogd = document.querySelector('meta[property="og:description"]');
     if (!ogd) { ogd = document.createElement('meta'); ogd.setAttribute('property','og:description'); head.appendChild(ogd); }
     ogd.setAttribute('content', s);
+    
     let ogu = document.querySelector('meta[property="og:url"]');
     if (!ogu) { ogu = document.createElement('meta'); ogu.setAttribute('property','og:url'); head.appendChild(ogu); }
     ogu.setAttribute('content', window.location.href);
+
+    // Canonical
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel','canonical'); head.appendChild(canonical); }
+    canonical.setAttribute('href', window.location.href);
+
+    // Initial JSON-LD (Skeleton)
+    let ld = document.getElementById('product-schema');
+    const schema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "name": s,
+      "description": s,
+      "url": window.location.href,
+      "image": "https://depotpartori.my/public/new app bar logo.svg", // Default placeholder
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "MYR",
+        "availability": "https://schema.org/InStock"
+      }
+    };
+    const json = JSON.stringify(schema);
+    if (!ld) {
+      ld = document.createElement('script');
+      ld.type = 'application/ld+json';
+      ld.id = 'product-schema';
+      ld.textContent = json;
+      head.appendChild(ld);
+    }
   }
 }
 
@@ -365,22 +403,36 @@ async function loadProduct() {
   if (descFullEl) descFullEl.textContent = descriptionText;
   const head = document.querySelector('head');
   if (head) {
+    document.title = `${title} | DepotPartOri`;
     let m = document.querySelector('meta[name="description"]');
     if (!m) { m = document.createElement('meta'); m.setAttribute('name','description'); head.appendChild(m); }
     m.setAttribute('content', descriptionText);
+    
     let ogt = document.querySelector('meta[property="og:title"]');
     if (!ogt) { ogt = document.createElement('meta'); ogt.setAttribute('property','og:title'); head.appendChild(ogt); }
     ogt.setAttribute('content', `${title} | DepotPartOri`);
+    
     let ogd = document.querySelector('meta[property="og:description"]');
     if (!ogd) { ogd = document.createElement('meta'); ogd.setAttribute('property','og:description'); head.appendChild(ogd); }
     ogd.setAttribute('content', descriptionText);
+    
     let ogi = document.querySelector('meta[property="og:image"]');
     if (!ogi) { ogi = document.createElement('meta'); ogi.setAttribute('property','og:image'); head.appendChild(ogi); }
     const firstImg = Array.isArray(data.images) && data.images.length ? productImageUrl(data.images[0]) : (data.image_url ? productImageUrl(data.image_url) : '');
     ogi.setAttribute('content', firstImg || '');
+    
+    let twi = document.querySelector('meta[name="twitter:image"]');
+    if (!twi) { twi = document.createElement('meta'); twi.setAttribute('name','twitter:image'); head.appendChild(twi); }
+    twi.setAttribute('content', firstImg || '');
+
     let ogu = document.querySelector('meta[property="og:url"]');
     if (!ogu) { ogu = document.createElement('meta'); ogu.setAttribute('property','og:url'); head.appendChild(ogu); }
     ogu.setAttribute('content', window.location.href);
+
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) { canonical = document.createElement('link'); canonical.setAttribute('rel','canonical'); head.appendChild(canonical); }
+    canonical.setAttribute('href', window.location.href);
+
     let ld = document.getElementById('product-schema');
     const inStock = Number.isFinite(Number(data.stock)) ? (Number(data.stock) > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock') : 'https://schema.org/InStock';
     const schema = {
