@@ -224,6 +224,15 @@ async function placeOrder() {
     if (ring) ring.remove();
     if (checkoutButton) checkoutButton.disabled = false;
   };
+  const nameVal = nameInput ? String(nameInput.value || '').trim() : '';
+  const email = emailInput ? String(emailInput.value || '').trim() : '';
+  if (!nameVal || !email) {
+    alert('Name and email are required.');
+    if (!nameVal && nameInput) nameInput.focus();
+    else if (!email && emailInput) emailInput.focus();
+    removeSpin();
+    return;
+  }
   const payment = getSelectedValue(paymentInputs);
   const delivery = getSelectedValue(deliveryInputs);
   if (!payment) {
@@ -241,7 +250,6 @@ async function placeOrder() {
     removeSpin();
     return;
   }
-  const email = emailInput ? emailInput.value.trim() : '';
   let user = null;
   const hasClient = !!client;
   if (hasClient) {
