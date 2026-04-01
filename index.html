@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DepotPartori Malaysia | Mobile Phone Spare Parts & Repair Components</title>
+  <meta name="description" content="Buy quality mobile phone spare parts in Malaysia. LCD screens, batteries, charging ports and repair parts for iPhone, Samsung, Vivo, Oppo and more.">
+  <meta property="og:title" content="DepotPartOri Malaysia | Mobile Phone Spare Parts & Repair Components">
+  <meta property="og:description" content="Buy quality mobile phone spare parts in Malaysia. LCD screens, batteries, charging ports and repair parts for iPhone, Samsung, Vivo, Oppo and more.">
+  <meta property="og:image" content="https://depotpartori.my/public/new app bar logo.svg">
+  <meta property="og:url" content="https://depotpartori.my/">
+  <meta property="og:type" content="website">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://depotpartori.my/public/new app bar logo.svg">
+  <link rel="canonical" href="https://depotpartori.my/">
+  <link rel="icon" href="public/fabicon.png" type="image/png">
+  <link rel="shortcut icon" href="public/fabicon.png" type="image/png">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <div class="left-group">
+        <button class="menu-toggle" id="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+        <a class="brand" href="index.html" aria-label="Home">
+          <img src="public/new app bar logo.svg" alt="Logo" class="brand-logo">
+        </a>
+        <nav class="nav-popover" id="nav-popover">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="cart.html">Cart</a>
+          <a href="checkout.html">Checkout</a>
+          <a href="login.html">Login</a>
+        </nav>
+      </div>
+      <div class="actions">
+        <a class="cart-link" href="cart.html" aria-label="Cart">
+          <svg class="cart-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h12l-1.5 9H8.1L6 6z" fill="currentColor"></path>
+            <circle cx="9" cy="18" r="1.5" fill="currentColor"></circle>
+            <circle cx="17" cy="18" r="1.5" fill="currentColor"></circle>
+          </svg>
+          <span class="badge">0</span>
+        </a>
+        <a class="profile-link" href="profile.html" aria-label="Profile">
+          <svg class="profile-icon" viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="8" r="4" fill="currentColor"></circle>
+            <path d="M4 20c0-4 4-6 8-6s8 2 8 6" fill="currentColor"></path>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero-wrapper">
+      <div class="hero-content">
+        <h1>Repair Your Mobile <br>With Confidence</h1>
+        <p>High-quality spare parts for iPhone, Samsung, Huawei & more. Fast delivery across Malaysia.</p>
+        <div id="search-bar" class="hero-search">
+          <input id="search-input" type="text" placeholder="Search for parts (e.g. iPhone 11 LCD)">
+          <button id="search-btn" type="button" aria-label="Search">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2" fill="none"></circle>
+              <line x1="16.5" y1="16.5" x2="21" y2="21" stroke="currentColor" stroke-width="2" stroke-linecap="round"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <!-- Abstract shape or illustration could go here -->
+        <div class="floating-card card-1">
+          <div class="icon-box">📱</div>
+          <span>LCD Screens</span>
+        </div>
+        <div class="floating-card card-2">
+          <div class="icon-box">🔋</div>
+          <span>Batteries</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Banner -->
+    <section class="features-banner">
+      <div class="feature-col">
+        <div class="f-icon">🚚</div>
+        <div class="f-text">
+          <strong>Fast Delivery</strong>
+          <span>1-3 Days Shipping</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">🛡️</div>
+        <div class="f-text">
+          <strong>Warranty</strong>
+          <span>3 Months Warranty</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">💳</div>
+        <div class="f-text">
+          <strong>Secure Payment</strong>
+          <span>DuitNow / FPX</span>
+        </div>
+      </div>
+      <div class="feature-col">
+        <div class="f-icon">💬</div>
+        <div class="f-text">
+          <strong>Support</strong>
+          <span>Daily 9am - 6pm</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section id="categories" class="section-block">
+      <div class="row-header">
+        <h2>Shop by Category</h2>
+        <div class="row-actions">
+           <!-- Scroll buttons managed by CSS/JS if needed, or just native scroll -->
+        </div>
+      </div>
+      <div class="hscroll" id="category-row"></div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="section-block">
+      <div class="row-header">
+        <h2>Featured Products</h2>
+      </div>
+      <div class="product-grid" id="featured-grid">
+         <!-- JS will populate this -->
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+         <div class="skeleton-card"></div>
+      </div>
+    </section>
+
+    <!-- Main Products (Latest) -->
+    <section class="section-block" id="latest-products">
+      <div class="row-header">
+        <h2>Latest Arrivals</h2>
+      </div>
+      <div class="product-grid" id="main-product-grid"></div>
+      <div class="pager">
+        <button class="page-btn" id="prev-page" type="button">Prev</button>
+        <span class="page-info" id="page-info">Page 1</span>
+        <button class="page-btn" id="next-page" type="button">Next</button>
+      </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="newsletter-section">
+      <div class="newsletter-content">
+        <h2>Join Our Newsletter</h2>
+        <p>Get the latest updates on new parts and exclusive offers.</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="public/new app bar logo.svg" alt="Logo" class="footer-logo">
+          <a class="brand" href="index.html">DepotPartori Malaysia</a>
+          <div class="footer-desc">Mobile phone spare parts & repair components.</div>
+        </div>
+        <nav class="footer-nav">
+          <a href="index.html">Home</a>
+          <a href="products.html">Products</a>
+          <a href="category.html">Categories</a>
+          <a href="cart.html">Cart</a>
+          <a href="checkout.html">Checkout</a>
+          <a href="login.html">Login</a>
+          <a href="profile.html">Profile</a>
+        </nav>
+        <div class="footer-meta">
+          <div class="meta-row"><span>Support</span><span><a href="order-status.html">Order Status</a></span></div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="footer-year"></span> DepotPartori Malaysia</span>
+      </div>
+    </div>
+  </footer>
+  <script src="assets/js/env.js"></script>
+  <script type="module" src="assets/js/supabase-client.js"></script>
+  <script src="assets/js/currency.js"></script>
+  <script src="assets/js/storage.js"></script>
+  <script src="assets/js/models.js"></script>
+  <script src="assets/js/cart.js"></script>
+  <script src="assets/js/products.js"></script>
+  <script src="assets/js/nav.js"></script>
+</body>
+</html>
