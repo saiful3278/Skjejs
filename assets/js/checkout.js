@@ -226,10 +226,21 @@ async function placeOrder() {
   };
   const nameVal = nameInput ? String(nameInput.value || '').trim() : '';
   const email = emailInput ? String(emailInput.value || '').trim() : '';
-  if (!nameVal || !email) {
-    alert('Name and email are required.');
+  const phoneVal = phoneInput ? String(phoneInput.value || '').trim() : '';
+  const streetEl = document.getElementById('buyer-street');
+  const postcodeEl = document.getElementById('buyer-postcode');
+  const stateEl = document.getElementById('buyer-state');
+  const streetVal = streetEl ? String(streetEl.value || '').trim() : '';
+  const postcodeVal = postcodeEl ? String(postcodeEl.value || '').trim() : '';
+  const stateVal = stateEl ? String(stateEl.value || '').trim() : '';
+  if (!nameVal || !email || !phoneVal || !streetVal || !postcodeVal || !stateVal) {
+    alert('All fields are required.');
     if (!nameVal && nameInput) nameInput.focus();
     else if (!email && emailInput) emailInput.focus();
+    else if (!phoneVal && phoneInput) phoneInput.focus();
+    else if (!streetVal && streetEl) streetEl.focus();
+    else if (!postcodeVal && postcodeEl) postcodeEl.focus();
+    else if (!stateVal && stateEl) stateEl.focus();
     removeSpin();
     return;
   }
